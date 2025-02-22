@@ -10,7 +10,7 @@ const uri = process.env.MONGODB_URI;
 app.use(express.json());
 
 app.use(
-  cors({ origin: ["https://storen-client.vercel.app","http://localhost:5173"] })
+  cors({ origin: ["https://storen-client.vercel.app", "http://localhost:5173"] })
 );
 
 
@@ -30,11 +30,9 @@ async function run() {
     // await client.connect();
 
     // Create a database and collection
-    const usersCollection = client.db("StoreNDB").collection("users");
-    const productsCollection = client.db("StoreNDB").collection("products");
-    const categoryCollection = client.db("StoreNDB").collection("category");
-    const cartsCollection = client.db("StoreNDB").collection("carts");
-    const orderCollection = client.db("StoreNDB").collection("all-orders");
+    const database = client.db("CarDealership");
+
+    const usersCollection = database.collection("users");
 
     // JWT
     app.post("/jwt", async (req, res) => {
