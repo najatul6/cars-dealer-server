@@ -11,12 +11,24 @@
     "type": "git",
     "url": "git+https://github.com/najatul6/cars-dealer-server.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "najatul6",
+    "cars",
+    "dealer",
+    "server"
+  ],
+  "author": "Md Najatul islam",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/najatul6/cars-dealer-server/issues"
   },
-  "homepage": "https://github.com/najatul6/cars-dealer-server#readme"
+  "homepage": "https://github.com/najatul6/cars-dealer-server#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.13.1",
+    "nodemon": "^3.1.9"
+  }
 }
