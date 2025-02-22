@@ -10,7 +10,7 @@ const uri = process.env.MONGODB_URI;
 app.use(express.json());
 
 app.use(
-  cors({ origin: [ "http://localhost:5173"] })
+  cors({ origin: ["https://cars-dealer-zeta.vercel.app", "http://localhost:5173"] })
 );
 
 
