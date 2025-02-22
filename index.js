@@ -10,7 +10,7 @@ const uri = process.env.MONGODB_URI;
 app.use(express.json());
 
 app.use(
-  cors({ origin: ["https://storen-client.vercel.app", "http://localhost:5173"] })
+  cors({ origin: [ "http://localhost:5173"] })
 );
 
 
