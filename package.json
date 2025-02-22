@@ -1,37 +1,33 @@
 {
-  "name": "cars-dealer-server",
+  "name": "server",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/najatul6/cars-dealer-server.git"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "najatul6",
     "najatul11",
-    "najatul96",
-    "najatul islam",
-    "cars",
-    "dealer",
-    "server"
+    "najatul",
+    "islam",
+    "najatulislam"
   ],
-  "author": "Md Najatul islam",
+  "author": "Md. Najatul islam",
   "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/najatul6/cars-dealer-server/issues"
-  },
-  "homepage": "https://github.com/najatul6/cars-dealer-server#readme",
+  "description": "",
   "dependencies": {
+    "axios": "^1.7.9",
+    "bkash-payment": "^3.0.5",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "firebase-admin": "^13.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.13.1",
-    "nodemon": "^3.1.9"
+    "mongodb": "^6.12.0",
+    "node": "^22.13.0",
+    "node-global-storage": "^3.0.1",
+    "nodemon": "^3.1.9",
+    "uuid": "^11.0.5"
   }
 }
