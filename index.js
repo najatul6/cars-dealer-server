@@ -36,6 +36,7 @@ async function run() {
     const cartsCollection = database.collection("wishlist");
     const productsCollection = database.collection("products");
     const categoryCollection = database.collection("category");
+    const shopItemsCollection = database.collection("shopItems");
 
     // JWT
     app.post("/jwt", async (req, res) => {
@@ -125,7 +126,6 @@ async function run() {
     });
 
     // Category related endpoints
-     // Get all Categories
      app.get("/category", async (req, res) => {
       const result = await categoryCollection.find().toArray();
       res.send(result);
@@ -149,6 +149,12 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await categoryCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // ShopItems related endpoints
+    app.get("/shopItems", async (req, res) => {
+      const result = await shopItemsCollection.find().toArray();
       res.send(result);
     });
 
