@@ -33,6 +33,7 @@ async function run() {
     const database = client.db("CarDealership");
 
     const usersCollection = database.collection("users");
+    const cartsCollection = database.collection("wishlist");
 
     // JWT
     app.post("/jwt", async (req, res) => {
@@ -71,14 +72,13 @@ async function run() {
       next();
     };
 
-    // Get all users
+    // User related endpoints
     app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const result = await usersCollection.findOne(query);
       res.send(result);
     });
-
 
     app.post("/createUser", async (req, res) => {
       const user = req.body;
@@ -94,7 +94,6 @@ async function run() {
     app.patch("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
       const { id } = req.params;
       const { role } = req.body;
-
       // Find the user by ID and update their role
       const query = { _id: new ObjectId(id) };
       const update = { $set: { role: role } };
@@ -116,6 +115,30 @@ async function run() {
       const result = await usersCollection.deleteOne(query);
       res.send(result);
     });
+
+    // Cart related endpoints
+    app.get("/carts/:email", verifyToken, async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await cartsCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.post("/createCart", verifyToken, async (req, res) => {
+      const cart = req.body;
+      const { productId, email } = cart;
+      const query = { productId, email };
+      const existingCart = await cartsCollection.findOne(query);
+  
+      if (existingCart) {
+          return res.send({ message: "Cart item already exists", insertedId: null });
+      }
+  
+      // Insert new cart item
+      const result = await cartsCollection.insertOne(cart);
+      res.send(result);
+  });
+
 
 
 
