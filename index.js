@@ -131,20 +131,28 @@ async function run() {
       res.send(result);
     });
 
+
     app.post("/createCart", verifyToken, async (req, res) => {
       const cart = req.body;
       const { itemId, email } = cart;
       const query = { itemId, email };
       const existingCart = await cartsCollection.findOne(query);
-  
+
       if (existingCart) {
-          return res.send({ message: "Cart item already exists", insertedId: null });
+        return res.send({ message: "Cart item already exists", insertedId: null });
       }
-  
+
       // Insert new cart item
       const result = await cartsCollection.insertOne(cart);
       res.send(result);
-  });
+    });
+
+    app.delete("/carts/:id", verifyToken, async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const result = await cartsCollection.deleteOne(query);
+      res.send(result);
+    });
 
 
 
