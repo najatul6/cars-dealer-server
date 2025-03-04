@@ -133,8 +133,8 @@ async function run() {
 
     app.post("/createCart", verifyToken, async (req, res) => {
       const cart = req.body;
-      const { productId, email } = cart;
-      const query = { productId, email };
+      const { itemId, email } = cart;
+      const query = { itemId, email };
       const existingCart = await cartsCollection.findOne(query);
   
       if (existingCart) {
