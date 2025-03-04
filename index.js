@@ -124,10 +124,13 @@ async function run() {
     });
 
     // Cart related endpoints
-    app.get("/carts/:email", verifyToken, async (req, res) => {
-      const email = req.params.email;
+    app.get("/carts", async (req, res) => {
+      const email = req.query.email;
+      if (!email) {
+        return res.status(400).send({ message: "User email is required" });
+      }
       const query = { email: email };
-      const result = await cartsCollection.findOne(query);
+      const result = await cartsCollection.find(query).toArray();
       res.send(result);
     });
 
