@@ -34,6 +34,7 @@ async function run() {
 
     const usersCollection = database.collection("users");
     const cartsCollection = database.collection("wishlist");
+    const productsCollection = database.collection("products");
 
     // JWT
     app.post("/jwt", async (req, res) => {
@@ -113,6 +114,12 @@ async function run() {
       const { id } = req.params;
       const query = { _id: new ObjectId(id) };
       const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // Products related endpoints
+    app.get("/products", async (req, res) => {
+      const result = await productsCollection.find({}).toArray();
       res.send(result);
     });
 
