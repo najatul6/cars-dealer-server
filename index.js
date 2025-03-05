@@ -37,6 +37,7 @@ async function run() {
     const productsCollection = database.collection("products");
     const categoryCollection = database.collection("category");
     const shopItemsCollection = database.collection("shopItems");
+    const supportTicketsCollection = database.collection("supportTickets");
 
     // JWT
     app.post("/jwt", async (req, res) => {
@@ -202,7 +203,16 @@ async function run() {
       const supportTicket = req.body;
       const result = await supportTicketsCollection.insertOne(supportTicket);
       res.send(result);
-    }
+    });
+
+    
+    app.delete("/supportTickets/:id", verifyToken, async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const result = await supportTicketsCollection.deleteOne(query);
+      res.send(result);
+    });
+
 
 
     // Send a ping to confirm a successful connection
