@@ -127,7 +127,7 @@ async function run() {
     });
 
     // Category related endpoints
-     app.get("/category", async (req, res) => {
+    app.get("/category", async (req, res) => {
       const result = await categoryCollection.find().toArray();
       res.send(result);
     });
@@ -193,26 +193,38 @@ async function run() {
       res.send(result);
     });
 
-// Support Ticket related endpoints
-    app.get("/supportTickets",verifyToken, async (req, res) => {
-      const result = await supportTicketsCollection.find().toArray();
+    // Get support tickets for a specific user
+    app.get("/supportTickets", verifyToken, async (req, res) => {
+      const userEmail = req.query.email; // Get email from query parameter
+
+      if (!userEmail) {
+        return res.status(400).send({ message: "User email is required" });
+      }
+
+      const query = { email: userEmail }; // Filter tickets by email
+      const result = await supportTicketsCollection.find(query).toArray();
       res.send(result);
     });
 
-    app.post("/createSupportTicket",verifyToken, async (req, res) => {
+    // Create a new support ticket
+    app.post("/supportTickets", verifyToken, async (req, res) => {
       const supportTicket = req.body;
+
+      if (!supportTicket.email) {
+        return res.status(400).send({ message: "User email is required" });
+      }
+
       const result = await supportTicketsCollection.insertOne(supportTicket);
-      res.send(result);
+      res.send({ insertedId: result.insertedId });
     });
 
-    
+    // Delete a support ticket
     app.delete("/supportTickets/:id", verifyToken, async (req, res) => {
       const { id } = req.params;
       const query = { _id: new ObjectId(id) };
       const result = await supportTicketsCollection.deleteOne(query);
       res.send(result);
     });
-
 
 
     // Send a ping to confirm a successful connection
