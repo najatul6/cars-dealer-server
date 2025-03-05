@@ -195,90 +195,50 @@ async function run() {
 
     // Get support tickets for a specific user
     app.get("/supportTickets", verifyToken, async (req, res) => {
-      const userEmail = req.query.email || req.user?.email; // Get email from query parameter or token
-      const userRole = req.user?.role; // Get user role from token
-    
+      const userEmail = req.query.email; // Get email from query parameter
+
       if (!userEmail) {
         return res.status(400).send({ message: "User email is required" });
       }
-    
-      try {
-        let query = {};
-        
-        // If the user is an admin, fetch all tickets
-        if (userRole === "admin") {
-          query = {}; // No email filter for admins
-        } else {
-          // Regular user can only see their own tickets
-          query = { email: userEmail };
-        }
-    
-        const result = await supportTicketsCollection.find(query).toArray();
-        res.send(result);
-      } catch (error) {
-        res.status(500).send({ message: "Failed to fetch tickets", error: error.message });
-      }
+
+      const query = { email: userEmail }; // Filter tickets by email
+      const result = await supportTicketsCollection.find(query).toArray();
+      res.send(result);
     });
-    
+
+    app.get("/tickets", verifyToken, verifyAdmin, async (req, res) => {
+      const result = await supportTicketsCollection.find().toArray();
+      res.send(result
+      );
+    });
 
     // Create a new support ticket
     app.post("/supportTickets", verifyToken, async (req, res) => {
-      const { title, email } = req.body;
-      const userEmail = req.user?.email; // Get the email from the authenticated user
-      const userRole = req.user?.role; // Get user role from token
-    
-      if (!email) {
+      const supportTicket = req.body;
+
+      if (!supportTicket.email) {
         return res.status(400).send({ message: "User email is required" });
       }
-    
-      // Admin can create tickets for any user, regular users can only create tickets for themselves
-      if (userRole !== "admin" && email !== userEmail) {
-        return res.status(403).send({ message: "You can only create tickets for yourself." });
-      }
-    
-      try {
-        const result = await supportTicketsCollection.insertOne({
-          title,
-          status: "Open",
-          email: email,
-        });
-    
-        res.send({ insertedId: result.insertedId });
-      } catch (error) {
-        res.status(500).send({ message: "Failed to create ticket", error: error.message });
-      }
+
+      const result = await supportTicketsCollection.insertOne(supportTicket);
+      res.send({ insertedId: result.insertedId });
     });
-    
 
     // Delete a support ticket
     app.delete("/supportTickets/:id", verifyToken, async (req, res) => {
       const { id } = req.params;
-      const userEmail = req.user?.email;
-      const userRole = req.user?.role;
-    
-      if (!id) {
-        return res.status(400).send({ message: "Ticket ID is required" });
-      }
-    
-      try {
-        const ticket = await supportTicketsCollection.findOne({ _id: new ObjectId(id) });
-    
-        if (!ticket) {
-          return res.status(404).send({ message: "Ticket not found" });
-        }
-    
-        // Admins can delete any ticket, users can only delete their own
-        if (userRole === "admin" || ticket.email === userEmail) {
-          const result = await supportTicketsCollection.deleteOne({ _id: new ObjectId(id) });
-          res.send(result);
-        } else {
-          return res.status(403).send({ message: "You can only delete your own tickets." });
-        }
-      } catch (error) {
-        res.status(500).send({ message: "Failed to delete ticket", error: error.message });
-      }
+      const query = { _id: new ObjectId(id) };
+      const result = await supportTicketsCollection.deleteOne(query);
+      res.send(result);
     });
-    
+
+    app.put("/supportTickets/:id", verifyToken, async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const update = { $set: req.body };
+      const result = await supportTicketsCollection.updateOne(query, update);
+      res.send(result);
+    });
 
 
     // Send a ping to confirm a successful connection
