@@ -192,7 +192,17 @@ async function run() {
       res.send(result);
     });
 
+// Support Ticket related endpoints
+    app.get("/supportTickets",verifyToken, async (req, res) => {
+      const result = await supportTicketsCollection.find().toArray();
+      res.send(result);
+    });
 
+    app.post("/createSupportTicket",verifyToken, async (req, res) => {
+      const supportTicket = req.body;
+      const result = await supportTicketsCollection.insertOne(supportTicket);
+      res.send(result);
+    }
 
 
     // Send a ping to confirm a successful connection
